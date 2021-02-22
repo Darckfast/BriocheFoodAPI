@@ -9,17 +9,18 @@ jobs:
   build:
     environment: docker
     runs-on: ubuntu-latest
-    env: 
-      DOCKER_IMAGE: darckfast/${{ github.event.repository.name }}
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: downcase repository
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
       - name: Docker meta
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: ${{ env.DOCKER_IMAGE }}
+          images: ${{ env.REPO }}
           tag-sha: true
 
       - name: Loga no DockerHub
@@ -44,4 +45,4 @@ jobs:
         uses: homoluctus/gitrivy@v1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          image: ${{ env.DOCKER_IMAGE }}:${{ env.RELEASE_VERSION }}
+          image: ${{ env.REPO }}:${{ env.RELEASE_VERSION }}
