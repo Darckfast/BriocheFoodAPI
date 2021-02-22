@@ -1,0 +1,16 @@
+tmp/
+src/
+
+.git
+.vscode
+.gitlab
+
+e2e/*.js
+e2e/*.map
+
+node_modules/
+npm-debug.log
+
+.scannerwork
+coverage
+.input
