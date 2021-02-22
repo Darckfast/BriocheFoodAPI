@@ -10,6 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: downcase repository
+      run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
     - name: Dockerfile lint check
       run: docker run --rm -i hadolint/hadolint < Dockerfile
    
@@ -17,7 +20,7 @@ jobs:
       id: docker_meta
       uses: crazy-max/ghaction-docker-meta@v1
       with:
-        images: ghcr.io/${{ github.repository }}
+        images: ghcr.io/${{ env.REPO }}
         tag-sha: true
 
     - name: Login to Github packages  
@@ -36,10 +39,10 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags:  ghcr.io/${{ github.repository }}:pr-${{ github.event.number }}
+        tags:  ghcr.io/${{ env.REPO }}:pr-${{ github.event.number }}
         labels: ${{ steps.docker_meta.outputs.labels }}
         
     - uses: homoluctus/gitrivy@v1.0.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        image: ghcr.io/${{ github.repository }}:pr-${{ github.event.number }}
+        image: ghcr.io/${{ env.REPO }}:pr-${{ github.event.number }}
