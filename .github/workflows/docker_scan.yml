@@ -1,0 +1,22 @@
+name: Varredura de vulnerabilidades
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+
+jobs:
+  scan:
+    name: Varredura de vulnerabilidades diária
+    runs-on: ubuntu-latest
+    steps:
+    - name: downcase repository
+      run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
+    - name: Baixa imagem docker
+      run: docker pull ${{ env.REPO }}:latest
+
+    - uses: homoluctus/gitrivy@v1.0.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        image: ${{ env.REPO }}:latest
+
