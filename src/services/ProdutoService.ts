@@ -1,7 +1,8 @@
+import { Produto } from '@models/Produto'
 import { ProdutoRepository } from '@repository/ProdutoRepository'
 import { log } from '@utils/CriarLogger'
 import { getCustomRepository } from 'typeorm'
-import { criptografarString } from './Cripta'
+import { criptografarString, descriptografarString } from './Cripta'
 import { buscarEstabelecimento, buscarEstabelecimentoPorId } from './EstabelecimentoService'
 
 const cadastrarProdutos = async (produtos: [{ nome: string, preco: number, quantidade: number }], login: string) => {
@@ -74,4 +75,23 @@ const buscarProdutos = async (pagina = 0, itens = 10) => {
   }
 }
 
-export { cadastrarProdutos, buscarProdutos }
+const buscarProdutoPorIdHash = async (idHash: string): Promise<Produto> => {
+  if (!idHash) {
+    // erro
+    throw new Error()
+  }
+
+  const id = parseInt(descriptografarString(idHash))
+
+  const produtoRepo = getCustomRepository(ProdutoRepository)
+  const produto = await produtoRepo.findOne({ id })
+
+  if (!produto) {
+    // erro
+    throw new Error()
+  }
+
+  return produto
+}
+
+export { cadastrarProdutos, buscarProdutos, buscarProdutoPorIdHash }
