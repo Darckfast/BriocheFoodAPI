@@ -5,6 +5,7 @@ import { body, oneOf, query } from 'express-validator'
 import { EstabelecimentoController } from '@controllers/EstabelecimentoController'
 import { ProdutoController } from '@controllers/ProdutoController'
 import { cnpj, cpf } from 'cpf-cnpj-validator'
+import { PedidoController } from '@controllers/PedidoController'
 
 const router = Router()
 
@@ -12,6 +13,7 @@ const usuarioController = new UsuarioController()
 const autenticacaoController = new AutenticacaoController()
 const estabelecimentoController = new EstabelecimentoController()
 const produtoController = new ProdutoController()
+const pedidoController = new PedidoController()
 
 router.post(
   '/api/v1/usuario',
@@ -64,5 +66,8 @@ router.get('/api/v1/produto',
   query('pagina').isInt({ min: 0 }),
   query('itens').isInt({ min: 1, max: 10 }),
   produtoController.buscar)
+
+router.post('/api/v1/pedido',
+  pedidoController.criar)
 
 export { router }

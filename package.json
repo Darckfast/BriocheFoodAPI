@@ -9,7 +9,7 @@
     "build": "babel src --extensions \".ts\" --out-dir dist --no-copy-ignored",
     "lint": "eslint src --ext ts",
     "start": "node dist/server.js",
-    "typeorm": "ts-node-dev node_modules/typeorm/cli.js"
+    "typeorm": "ts-node-dev -r dotenv/config node_modules/typeorm/cli.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.17",

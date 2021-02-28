@@ -14,7 +14,7 @@ class Pedido {
   @Column({ name: 'pro_id' })
   produtoId: number
 
-  @Column({ name: 'pro_status' })
+  @Column({ name: 'ped_status' })
   status: number
 
   @Column({ name: 'ped_quantidade' })
@@ -22,6 +22,9 @@ class Pedido {
 
   @Column({ name: 'ped_total' })
   total: number
+
+  @Column({ name: 'ped_protocolo' })
+  protocolo: number
 
   @CreateDateColumn({ name: 'ped_data', insert: false })
   pedidoEm: Date

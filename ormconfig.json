@@ -1,9 +1,9 @@
 {
   "logging": false,
   "migrations": [
-    "./src/db/migrations/**.ts"
+    "src/db/migrations/**.ts"
   ],
   "cli": {
-    "migrationsDir": "./src/db/migrations"
+    "migrationsDir": "src/db/migrations"
   }
 }
