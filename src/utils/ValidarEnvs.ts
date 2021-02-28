@@ -5,7 +5,7 @@ const validarEnvs = () => {
     'PAGARME_API_KEY',
     'API_ENC_KEY',
     'RSA_AUTH_PRI_KEY',
-    'RAS_AUTH_PUB_KEY',
+    'RSA_AUTH_PUB_KEY',
     'TYPEORM_HOST',
     'TYPEORM_USERNAME',
     'TYPEORM_PASSWORD',

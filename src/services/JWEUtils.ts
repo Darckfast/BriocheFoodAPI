@@ -1,13 +1,13 @@
+import { TokenFaltandoErro } from '@erro/TokenFaltandoErro';
+import { TokenInvalidoErro } from '@erro/TokenInvalidoErro';
 import { log } from '@utils/CriarLogger'
 import { JWK, JWE } from 'node-jose'
-import { TokenFaltandoErro } from 'src/erros/TokenFaltandoErro'
-import { TokenInvalidoErro } from 'src/erros/TokenInvalidoErro'
 
 class JWEUtils {
   keystore = JWK.createKeyStore();
 
   privateKey: string = process.env.RSA_AUTH_PRI_KEY || ''
-  publicKey: string = process.env.RAS_AUTH_PUB_KEY || ''
+  publicKey: string = process.env.RSA_AUTH_PUB_KEY || ''
 
   async gerarJWE (payload: Object): Promise<string> {
     const key = await JWK.asKey(this.publicKey, 'pem', { alg: 'RSA-OAEP-256', use: 'enc' })

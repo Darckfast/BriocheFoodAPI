@@ -1,10 +1,11 @@
 
+import { SenhaFracaErro } from '@erro/SenhaFracaErro'
+import { UsuarioExisteErro } from '@erro/UsuarioExiste'
+import { criarUsuario } from '@services/UsuarioService'
 import { log } from '@utils/CriarLogger'
 import type { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
-import { SenhaFracaErro } from '../erros/SenhaFracaErro'
-import { UsuarioExisteErro } from '../erros/UsuarioExiste'
-import { criarUsuario } from '../services/UsuarioService'
+
 
 class UsuarioController {
   async criar (req: Request, res: Response) {

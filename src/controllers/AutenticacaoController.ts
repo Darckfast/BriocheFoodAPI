@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
-import { JWEUtils } from 'src/services/JWEUtils'
-import { SenhaNaoConfere } from 'src/erros/SenhaNaoConfere'
-import { UsuarioNaoExisteErro } from 'src/erros/UsuarioNaoExiste'
-import { autenticarUsuario } from 'src/services/UsuarioService'
 import { log } from '@utils/CriarLogger'
+import { SenhaNaoConfere } from '@erro/SenhaNaoConfere'
+import { UsuarioNaoExisteErro } from '@erro/UsuarioNaoExiste'
+import { JWEUtils } from '@services/JWEUtils'
+import { autenticarUsuario } from '@services/UsuarioService'
 
 class AutenticacaoController {
   async autenticar (req: Request, res: Response) {

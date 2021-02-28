@@ -1,12 +1,12 @@
+import { EstabelecimentoBean } from '@beans/EstabelecimentoBean'
 import { ConflitoEstabelecimentoErro } from '@erro/ConflitoEstabelecimentoErro'
+import { TokenFaltandoErro } from '@erro/TokenFaltandoErro'
+import { TokenInvalidoErro } from '@erro/TokenInvalidoErro'
 import { cadastrarEstabelecimento } from '@services/EstabelecimentoService'
+import { JWEUtils } from '@services/JWEUtils'
 import { log } from '@utils/CriarLogger'
 import type { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
-import { EstabelecimentoBean } from 'src/beans/EstabelecimentoBean'
-import { TokenFaltandoErro } from 'src/erros/TokenFaltandoErro'
-import { TokenInvalidoErro } from 'src/erros/TokenInvalidoErro'
-import { JWEUtils } from 'src/services/JWEUtils'
 
 class EstabelecimentoController {
   async criar (req: Request, res: Response) {

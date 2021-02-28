@@ -1,5 +1,6 @@
 import { JWEUtils } from '@services/JWEUtils'
 import { cadastrarProdutos, buscarProdutos } from '@services/ProdutoService'
+import { log } from '@utils/CriarLogger'
 import type { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 
@@ -8,7 +9,7 @@ class ProdutoController {
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
-      console.log('Payload para cadastrar produtos nao passou na validacao', errors)
+      log.warn('Payload para criar produto invalido', errors)
 
       return res.status(400).json({
         mensagem: 'payload invalido'
@@ -23,7 +24,7 @@ class ProdutoController {
 
       return res.status(200).json(produtosCadastrados)
     } catch (e) {
-      console.log(e)
+      log.error('Erro interno na criacao de produto', e)
 
       return res.status(500).json({
         mensagem: 'erro interno'
@@ -35,7 +36,7 @@ class ProdutoController {
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
-      console.log('Payload para cadastrar produtos nao passou na validacao', errors)
+      log.warn('Payload para buscar produtos invalido', errors)
 
       return res.status(400).json({
         mensagem: 'payload invalido'
