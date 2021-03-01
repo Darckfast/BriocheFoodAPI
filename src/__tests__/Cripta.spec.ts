@@ -1,4 +1,4 @@
-import { criptografarString, comparaSenha } from '../services/Cripta'
+import { criptografarString, comparaSenha, gerarHashString } from '../services/Cripta'
 
 describe('cripta', () => {
   it('criptografar senha', () => {
@@ -12,7 +12,7 @@ describe('cripta', () => {
   it('comparar senha', () => {
     const texto = 'conteudo a ser criptografado'
 
-    const textoCript = criptografarString(texto)
+    const textoCript = gerarHashString(texto)
 
     const resultado = comparaSenha(texto, textoCript)
 

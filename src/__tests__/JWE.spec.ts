@@ -1,3 +1,4 @@
+import { TokenInvalidoErro } from '@erro/TokenInvalidoErro'
 import { JWEUtils } from '../services/JWEUtils'
 
 describe('JWE', () => {
@@ -20,13 +21,17 @@ describe('JWE', () => {
     const jweString = await new JWEUtils().gerarJWE({ test: 1 })
     const resultado = await new JWEUtils().verificarJWE(jweString)
 
-    expect(resultado).toBe(true)
+    expect(resultado).toHaveProperty('iat')
+    expect(resultado).toHaveProperty('exp')
+    expect(resultado).toHaveProperty('test')
   })
 
   it('verificar JWE invalido', async () => {
+    let erro = false
     const jweString = await new JWEUtils().gerarJWE({ test: 1 })
-    const resultado = await new JWEUtils().verificarJWE(jweString.concat('1'))
+    await new JWEUtils().verificarJWE(jweString.concat('1'))
+      .catch(e => { erro = true })
 
-    expect(resultado).toBe(false)
+    expect(erro).toBe(true)
   })
 })
