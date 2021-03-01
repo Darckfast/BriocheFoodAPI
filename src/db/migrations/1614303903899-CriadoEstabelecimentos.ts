@@ -21,7 +21,8 @@ export class CriadoEstabelecimentos1614303903899 implements MigrationInterface {
           {
             name: 'usu_id',
             type: 'int',
-            isUnique: true
+            isUnique: true,
+            isNullable: true
           },
           {
             name: 'est_criado_em',
