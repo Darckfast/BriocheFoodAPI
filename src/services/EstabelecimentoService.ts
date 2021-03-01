@@ -1,5 +1,6 @@
 import { EstabelecimentoBean } from '@beans/EstabelecimentoBean'
 import { ConflitoEstabelecimentoErro } from '@erro/ConflitoEstabelecimentoErro'
+import { NaoEncontradoErro } from '@erro/NaoEncontradoErro'
 import { Estabelecimento } from '@models/Estabelecimento'
 import { EstabelecimentoRepository } from '@repository/EstabelecimentoRepository'
 import { log } from '@utils/CriarLogger'
@@ -39,10 +40,16 @@ const buscarEstabelecimento = async (login: string): Promise<Estabelecimento | u
   return await estabelecimentoRepo.findOne({ usuId: usuario?.id })
 }
 
-const buscarEstabelecimentoPorId = async (id: number): Promise<Estabelecimento | undefined> => {
+const buscarEstabelecimentoPorId = async (id: number): Promise<Estabelecimento> => {
   const estabelecimentoRepo = getCustomRepository(EstabelecimentoRepository)
 
-  return await estabelecimentoRepo.findOne({ id })
+  const estabelecimento = await estabelecimentoRepo.findOne({ id })
+
+  if (!estabelecimento) {
+    throw new NaoEncontradoErro('Estabelecimento nao encontrado ' + id)
+  }
+
+  return estabelecimento
 }
 
 export { cadastrarEstabelecimento, buscarEstabelecimento, buscarEstabelecimentoPorId }

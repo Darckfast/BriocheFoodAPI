@@ -9,13 +9,21 @@ import { buscarProdutoPorIdHash } from './ProdutoService'
 import { gerarProtocolo } from './ProtocoloService'
 import { buscarUsuarioPorLogin } from './UsuarioService'
 import { criarTransacao } from './PagarmeService'
+import { QuantidadeErro } from '@erro/QuantidadeErro'
+import { ProdutoVazioErro } from '@erro/ProdutoVazioErro'
+import { buscarEstabelecimentoPorId } from './EstabelecimentoService'
 
 class PedidoService {
   @Transaction()
   async criarPedido (
-    @TransactionRepository(PedidoRepository) pedidoRepository: PedidoRepository,
-    @TransactionRepository(ProdutoRepository) produtoRepository: ProdutoRepository,
-      pedidoPayload: Pedido, login: string): Promise<string> {
+    pedidoPayload: Pedido, login: string,
+    @TransactionRepository(PedidoRepository) pedidoRepository?: PedidoRepository,
+    @TransactionRepository(ProdutoRepository) produtoRepository?: ProdutoRepository): Promise<string> {
+    if (!pedidoRepository || !produtoRepository) {
+      // Workaround para a issue #1828 do typeorm com typescript
+      throw new Error('Repositorio nao injetado devidamente')
+    }
+
     log.info('Validando itens')
     const prodValidados = await validarProdutos(pedidoPayload.carrinho)
 
@@ -26,8 +34,11 @@ class PedidoService {
     }
 
     const protocolo = await gerarProtocolo()
+    const pedidoId = criptografarString(protocolo)
 
     for (const item of prodValidados.itens) {
+      const { recebedorId } = await buscarEstabelecimentoPorId(item.estabelecimentoId)
+
       log.info('Dando baixa no item %s (%s)', item.id, item.quantidade)
       produtoRepository.atualizarQuantidade(item.id, item.quantidade)
       log.info('Baixa do item %s (%s) feita com sucesso', item.id, item.quantidade)
@@ -42,22 +53,24 @@ class PedidoService {
         protocolo
       })
 
-      log.info('[%s] - Pedido criado', protocolo)
+      log.info('[%s] - Pedido criado - valor %s', protocolo, pedido.total)
+
+      log.info('Criando transcao para o pedido [%s] com o total %s', pedidoId, prodValidados.total)
+      const tid = await criarTransacao(pedidoPayload.pagamento, pedidoPayload.envio, pedido.total, recebedorId)
+
+      pedido.transacaoId = parseInt(tid)
 
       await pedidoRepository.save(pedido)
     }
 
-    const pedidoId = criptografarString(protocolo)
-
-    await criarTransacao(pedidoPayload.pagamento, pedidoPayload.envio, prodValidados.total)
-
+    log.info('Transacao [%s] concluida com sucesso', pedidoId)
     return pedidoId
   }
 }
 
 const validarProdutos = async (itens: Carrinho[]) => {
   if (!itens) {
-    // new erro
+    throw new ProdutoVazioErro()
   }
 
   const produtosNoCarrinho = []
@@ -67,7 +80,10 @@ const validarProdutos = async (itens: Carrinho[]) => {
     const produto = await buscarProdutoPorIdHash(item.produtoId)
 
     if (produto.quantidade < item.quantidade) {
-      throw new Error('Quantidade em estoque inferior a comprada')
+      log.warn('Quantidade em estoque (%s) inferior a comprada (%s)',
+        produto.quantidade, item.quantidade)
+
+      throw new QuantidadeErro('Quantidade em estoque inferior a comprada')
     }
 
     const prodCarrinho = {
