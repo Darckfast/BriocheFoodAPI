@@ -1,3 +1,12 @@
+# BriocheFoodAPI
+
+## Rodando a API
+
+Esta API possui sua propiá [imagem Docker](https://hub.docker.com/r/darckfast/briochefoodapi)
+
+Para executar essa API é necessário configurar um banco MySQL e para isso basta seguir as instruções abaixo
+
+Chaves RSA e outros segredos tambem são necessários. Para facilitar o teste/desenvolvimento, dentro do diretorio `src/__test__` há os seguintes arquivos `_test.pem`, `_test.pub` e `.test.env` que possuem chaves usadas somente para **teste** e não devem ser usadas em produção
 
 ### Criando o DB
 
@@ -12,25 +21,48 @@ docker exec -it main-db sh
 ```
 
 ```bash
-mysql -u root -p senha_super_secreta
+mysql -u root -p 
+#> Enter password: senha_super_secreta
 ```
 
 ```bash
-create database briochefood_db;
+create database api_db;
 
-create user 'briochefood_api'@'%' identified by 'senha_secreta_da_minha_api';
+create user 'usuario_api'@'%' identified by 'senha_super_secreta';
 
-grant CREATE, DELETE, INSERT, SELECT, UPDATE, ALTER, REFERENCES on briochefood_db.* to 'briochefood_api'@'%';
+grant CREATE, DELETE, INSERT, SELECT, UPDATE, ALTER, REFERENCES on api_db.* to 'usuario_api'@'%';
 
-show grants for 'briochefood_api'@'%';
+show grants for 'usuario_api'@'%';
 ```
 
-Isso vai criar um usuário no db com o login `briochefood_api` e a senha `senha_secreta_da_minha_api`
+Isso vai criar um usuário no db com o login `usuario_api` com a senha `senha_super_secreta`
 
+Execute as migrations
+
+```bash
+yarn typeorm migration:run
+```
+
+### Docker
+
+Para rodar a imagem Docker da API execute:
+
+```bash
+docker run -it \
+  -p 3333:3333 \
+  --env-file src/__tests__/.test.env \
+  -e RSA_AUTH_PRI_KEY="$(cat src/__tests__/_test.pem)" \
+  -e RSA_AUTH_PUB_KEY="$(cat src/__tests__/_test.pub)" \
+  -e PAGARME_API_KEY=api_key_pagar_me \
+  -e RE_ID=id_do_recebedor_principal \
+  darckfast/briochefoodapi
+```
+
+A `PAGARME_API_KEY` (api key) e `RE_ID` (id do recebedor) ambos podem ser obtidos na Dashboard da Pagar.me
 
 ### Configurando o .env para desenvolvimento
 
-Para configurar os segredos e as credencias crie um `.env` na raiz do projeto (esse arquivo é ignorado no push) com as seguintes envs:
+Para configurar os segredos e as credencias crie um `.env` na raiz do projeto, ou copie o `.test.env` do diretório `src/__test__` para a raiz do projeto com o nome `.env`, (esse arquivo é ignorado no push) com as seguintes envs:
 
 ```
 PAGARME_API_KEY=api_da_pagarme
@@ -48,12 +80,251 @@ Para teste e desenvolvimento as chaves RSA podem ser geradas usando alguma ferra
 
 Para o uso em produção, é recomendado a geração das chaves usando openssl, e elas devem ser armazenadas em um cofre de segredos como o [Vault](https://www.vaultproject.io/) ou [AWS Secrets Manager](https://aws.amazon.com/pt/secrets-manager)
 
-// Nao testado
+## Endpoints
 
-```bash
-openssl genrsa -des3 -out private.pem 2048
+### Usuario
 
-openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+Este endpoint permite a criação de usuário (necessário para cadastrar um estabelecimento)
 
-openssl rsa -in private.pem -out private_unencrypted.pem -outform PEM
+```http
+POST /api/v1/usuario HTTP/1.1
+Host: localhost:3333
+Content-Type: application/json
+Accept: application/json
+Content-Length: 135
+
+{
+ 	"login": "login_do_usuario",
+ 	"senha": "senha_do_usuario",
+ 	"nome": "primeiro usuario",
+ 	"tipo": 0,
+ 	"email": "email@gmail.com.br"
+}
+```
+
+#### Cadastro com sucesso
+
+```http
+HTTP/1.1 200 OK
+
+{
+  "mensagem": "usuario criado"
+}
+```
+
+
+### Autenticação
+
+Este endpoint faz a autenticação do usuário, a autenticação é necessária para realizar algumas operações
+
+```http
+POST /api/v1/auth HTTP/1.1
+Host: localhost:3333
+Content-Type: application/json
+Accept: application/json
+Content-Length: 52
+
+{
+ 	"login": "login_do_usuario",
+ 	"senha": "senha_do_usuario"
+}
+```
+
+#### Autenticação com sucesso
+
+O *Bearer* de autenticação é retornado na responta no *header* **Authorization**
+
+```http
+HTTP/1.1 200 OK
+Authorization: Bearer eyJlbmMiOiJBMjU2R0NNIiwi...
+```
+
+### Estabelecimento
+
+Este endpoint permite a criação de estabelecimentos (necessário para cadastrar produtos) e requer um usuário autenticado
+
+```http
+POST /api/v1/estabelecimento HTTP/1.1
+Host: localhost:3333
+Content-Type: application/json
+Authorization: Bearer eyJlbmMiOiJBMjU2R0NNIiw...
+Accept: application/json
+Content-Length: 210
+
+{
+	"nome": "Nome do estabelecimento",
+	"codigo_banco": "237",
+	"agencia": "1935",
+	"agencia_dv": "9",
+	"conta": "23398",
+	"conta_dv": "9",
+	"nome_legal": "API BANK ACCOUNT",
+	"numero_documento": "26268738888"
+}
+```
+
+#### Cadastro com sucesso
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+	"login": "login_do_usuario",
+	"senha": "senha_do_usuario"
+}
+```
+
+### Produto
+#### Cadastro
+
+Este endpoint permite o cadastro de produtos para um estabelecimento (o usuário autenticado deve possuir um estabelecimento cadastrado)
+
+```http
+POST /api/v1/produto HTTP/1.1
+Host: localhost:3333
+Content-Type: application/json
+Authorization: Bearer eyJlbmMiOiJBMjU2R0NNIiwi....
+Accept: application/json
+Content-Length: 165
+
+ {
+ 	"produtos": [
+ 		{
+ 			"nome": "Café",
+ 			"preco": 2.55,
+ 			"quantidade": 500
+ 		},
+ 		{
+ 			"nome": "Suco de laranja",
+ 			"preco": 3.5,
+ 			"quantidade": 300
+ 		}
+	]
+}
+```
+
+#### Cadastro com sucesso
+
+```http
+HTTP/1.1 200 OK
+
+[
+  {
+    "id": "vwHIyiXtbJykNBePvBmcJA==VvOmoGz+sqNB3qXTF18qMA==lg==",
+    "nome": "Café",
+    "preco": 2.55,
+    "quantidade": 500
+  },
+  {
+    "id": "KgZKWLGuTVRFdLSeP2+wNg==BuRyZKlqoJAdIp2RXyd+pg==9A==",
+    "nome": "Suco de laranja",
+    "preco": 3.5,
+    "quantidade": 300
+  }
+]
+```
+
+#### Busca
+
+Retorna, com paginação, todos os produtos cadastrados
+
+```http
+GET /api/v1/produto?pagina=0&itens=10 HTTP/1.1
+Host: localhost:3333
+Accept: application/json
+```
+
+#### Busca com sucesso
+
+```http
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 2160
+Date: Mon, 01 Mar 2021 01:22:17 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{
+  "conteudo": [
+    {
+      "id": "derr8Q+cI9grTkTqKJkDUA==X3RvLKtWSMqw8LvSPZKGGQ==KAg=",
+      "nome": "Suco de laranja",
+      "preco": 3.5,
+      "quantidade": 300,
+      "estabelecimentoId": "vfQBJMOBEpRrEMwcJpjntg==It/QzJQUEP9lwCSFBJq7/w==tEg=",
+      "estabelecimento": "k5kFkX"
+    },
+    {
+      "id": "ctxFCt15QEJ19DbZp0KLhg==bRc7Xodom5YN37C6xFwU5Q==vjI=",
+      "nome": "Café",
+      "preco": 2.55,
+      "quantidade": 500,
+      "estabelecimentoId": "638GGuKrN1LoQSXZuD8PHQ==0lETDvZ2/gfofp7dmOicOg==OHk=",
+      "estabelecimento": "k5kFkX"
+    },
+    {
+      "id": "zqxS0zfEM+HJaQFMiEbeYg==uO6Mso8MJJOJX3FWV0vYAQ==u7U=",
+      "nome": "Suco de laranja",
+      "preco": 3.5,
+      "quantidade": 300,
+      "estabelecimentoId": "hQOAJSW7TxPvu+cFtBDjxw==58dELbG+Cn0IRvNJ1jgPEA==9rc=",
+      "estabelecimento": "bBgBcV"
+    }
+  ],
+  "total": 3
+}
+```
+
+### Pedido
+#### Gerar pedido
+
+```http
+POST /api/v1/pedido HTTP/1.1
+Host: localhost:3333
+Content-Type: application/json
+Accept: application/json
+Content-Length: 547
+
+ {
+ 	"carrinho": [
+ 		{
+ 			"produtoId": "Kuv7EA7ZPrKvbJTuOi3aQg==o5bXXsj66mDvhLJHrms0lQ==6Q==",
+ 			"quantidade": 10
+ 		},
+ 		{
+ 			"produtoId": "vwHIyiXtbJykNBePvBmcJA==VvOmoGz+sqNB3qXTF18qMA==lg==",
+ 			"quantidade": 1
+ 		}
+ 	],
+ 	"pagamento": {
+ 		"numero_cartao": "4111111111111111",
+ 		"cvv": "132",
+ 		"data_expiracao":"0922",
+ 		"nome": "Morpheus Fishburne"
+ 	},
+ 	"envio": {
+ 		"nome": "Neo Reeves",
+ 		"endereco": {
+ 			"estado": "sp",
+ 			"cidade": "Cotia",
+ 			"bairro": "Rio Cotia",
+ 			"rua": "Rua Matrix",
+ 			"numero": "9999",
+ 			"cep": "06714360"
+ 		}
+ 	}
+ }
+```
+
+#### Pedido feito com sucesso
+
+```http
+HTTP/1.1 200 OK
+
+{
+  "mensagem": "pedido realizado",
+  "pedidoId": "l8GGJNcaUUxqFjcT9/qpTw==SokF2nCDsTtuEj12I3a/sw==SUvqylsodHs="
+}
 ```
