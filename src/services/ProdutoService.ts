@@ -1,3 +1,5 @@
+import { IDInvalidoErro } from '@erro/IDInvalidoErro'
+import { ProdutoNaoExisteErro } from '@erro/ProdutoNaoExisteErro'
 import { Produto } from '@models/Produto'
 import { ProdutoRepository } from '@repository/ProdutoRepository'
 import { log } from '@utils/CriarLogger'
@@ -77,8 +79,7 @@ const buscarProdutos = async (pagina = 0, itens = 10) => {
 
 const buscarProdutoPorIdHash = async (idHash: string): Promise<Produto> => {
   if (!idHash) {
-    // erro
-    throw new Error()
+    throw new IDInvalidoErro()
   }
 
   const id = parseInt(descriptografarString(idHash))
@@ -87,8 +88,7 @@ const buscarProdutoPorIdHash = async (idHash: string): Promise<Produto> => {
   const produto = await produtoRepo.findOne({ id })
 
   if (!produto) {
-    // erro
-    throw new Error()
+    throw new ProdutoNaoExisteErro('Produto nao encontrado ' + id)
   }
 
   return produto
