@@ -1,7 +1,6 @@
 FROM node:lts-alpine as builder
-#ENV NODE_ENV=production
-
 WORKDIR /build
+
 COPY . .
 RUN yarn && yarn build && rm -rf node_modules
 
