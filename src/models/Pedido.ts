@@ -26,6 +26,9 @@ class Pedido {
   @Column({ name: 'ped_protocolo' })
   protocolo: number
 
+  @Column({ name: 'ped_transacao_id' })
+  transacaoId: number
+
   @CreateDateColumn({ name: 'ped_data', insert: false })
   pedidoEm: Date
 }
