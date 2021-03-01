@@ -1,4 +1,8 @@
 import { Pedido } from '@beans/PedidoBean'
+import { IDInvalidoErro } from '@erro/IDInvalidoErro'
+import { ProdutoNaoExisteErro } from '@erro/ProdutoNaoExisteErro'
+import { ProdutoVazioErro } from '@erro/ProdutoVazioErro'
+import { QuantidadeErro } from '@erro/QuantidadeErro'
 import { JWEUtils } from '@services/JWEUtils'
 import { PedidoService } from '@services/PedidoService'
 import { log } from '@utils/CriarLogger'
@@ -31,6 +35,15 @@ class PedidoController {
         pedidoId
       })
     } catch (e) {
+      if (e instanceof QuantidadeErro ||
+        e instanceof IDInvalidoErro ||
+        e instanceof ProdutoNaoExisteErro ||
+        e instanceof ProdutoVazioErro) {
+        return res.status(400).json({
+          mensagem: 'requisicao invalida'
+        })
+      }
+
       log.error('Erro interno na geracao do pedido', e)
 
       return res.status(500)
