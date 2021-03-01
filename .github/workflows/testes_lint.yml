@@ -4,15 +4,32 @@ on: [pull_request]
 
 jobs:
   tests:
+    environment: test
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [14.x]
 
+    env:
+      TYPEORM_CONNECTION: mysql
+      TYPEORM_HOST: localhost
+      TYPEORM_PORT: 3306
+      TYPEORM_ENTITIES: src/models/*.ts,models/*.js
+      TYPEORM_MIGRATIONS: src/db/migrations/**.ts
+      TYPEORM_MIGRATIONS_DIR: src/db/migrations
+      TYPEORM_MIGRATIONS_RUN: src/db/migrations
+
     steps:
     - uses: actions/checkout@v2
 
+    - uses: mirromutth/mysql-action@v1.1
+      with:
+        mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
+        mysql database: ${{ secrets.TYPEORM_DATABASE }} # Optional, default value is "test". The specified database which will be create
+        mysql user: ${{ secrets.TYPEORM_USERNAME }} # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+        mysql password: ${{ secrets.TYPEORM_PASSWORD }} # Required if "mysql user" exists. The password for the "mysql user"
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -20,6 +37,9 @@ jobs:
 
     - name: Instalar pacotes
       run: yarn install --frozen-lockfile
+
+    - name: Executar migrations
+      run: yarn typeorm migration:run
 
     - name: Rodar testes
       run: yarn test
