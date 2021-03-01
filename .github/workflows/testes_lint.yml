@@ -50,7 +50,7 @@ jobs:
       run: yarn typeorm migration:run
 
     - name: Rodar testes
-      run: yarn test
+      run: yarn test --forceExit --runInBand --detectOpenHandles
     
     - name: Validar code-style
       run: yarn lint
