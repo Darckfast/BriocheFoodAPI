@@ -19,7 +19,15 @@ jobs:
       TYPEORM_MIGRATIONS: src/db/migrations/**.ts
       TYPEORM_MIGRATIONS_DIR: src/db/migrations
       TYPEORM_MIGRATIONS_RUN: src/db/migrations
-
+      TYPEORM_USERNAME: ${{ secrets.TYPEORM_USERNAME }}
+      TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
+      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DATABASE }}
+      PAGARME_API_KEY: ${{ secrets.PAGARME_API_KEY }}
+      RE_ID: ${{ secrets.RE_ID }}
+      API_ENC_KEY: ${{ secrets.API_ENC_KEY }}
+      RSA_AUTH_PRI_KEY: ${{ secrets.RSA_AUTH_PRI_KEY }}
+      RSA_AUTH_PUB_KEY: ${{ secrets.RSA_AUTH_PUB_KEY }} 
+    
     steps:
     - uses: actions/checkout@v2
 
