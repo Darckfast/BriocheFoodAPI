@@ -1,13 +1,13 @@
-import { TokenFaltandoErro } from '@erro/TokenFaltandoErro';
-import { TokenInvalidoErro } from '@erro/TokenInvalidoErro';
+import { TokenFaltandoErro } from '@erro/TokenFaltandoErro'
+import { TokenInvalidoErro } from '@erro/TokenInvalidoErro'
 import { log } from '@utils/CriarLogger'
 import { JWK, JWE } from 'node-jose'
 
 class JWEUtils {
   keystore = JWK.createKeyStore();
 
-  privateKey: string = process.env.RSA_AUTH_PRI_KEY || ''
-  publicKey: string = process.env.RSA_AUTH_PUB_KEY || ''
+  privateKey: string = process.env.RSA_AUTH_PRI_KEY as string
+  publicKey: string = process.env.RSA_AUTH_PUB_KEY as string
 
   async gerarJWE (payload: Object): Promise<string> {
     const key = await JWK.asKey(this.publicKey, 'pem', { alg: 'RSA-OAEP-256', use: 'enc' })
@@ -59,7 +59,14 @@ class JWEUtils {
     }
 
     try {
-      return await this.getConteudo(jwe)
+      const conteudo = await this.getConteudo(jwe)
+      const { exp } = conteudo
+
+      if (exp < new Date().getTime()) {
+        log.warn('Bearer de autenticacao expirado')
+      }
+
+      return conteudo
     } catch (e) {
       log.error('Bearer invalido', e)
 
