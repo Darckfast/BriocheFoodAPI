@@ -11,7 +11,8 @@ const validarEnvs = () => {
     'TYPEORM_PASSWORD',
     'TYPEORM_DATABASE',
     'TYPEORM_PORT',
-    'NODE_ENV'
+    'NODE_ENV',
+    'RE_ID'
   ]
 
   envs.forEach(env => {
