@@ -6,7 +6,6 @@ import { log } from '@utils/CriarLogger'
 import type { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 
-
 class UsuarioController {
   async criar (req: Request, res: Response) {
     const errors = validationResult(req)

@@ -1,4 +1,3 @@
-import { TokenInvalidoErro } from '@erro/TokenInvalidoErro'
 import { JWEUtils } from '../services/JWEUtils'
 
 describe('JWE', () => {

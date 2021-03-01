@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 
 export interface Carrinho {
   produtoId: string
@@ -16,6 +17,7 @@ export interface Endereco {
 export interface Envio {
   nome: string
   endereco: Endereco
+
 }
 
 export interface Pagamento {

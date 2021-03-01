@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export interface Recebedor {
   codigo_banco: string
   agencia: string

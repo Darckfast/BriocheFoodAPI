@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 export interface EstabelecimentoBean {
   nome: string
   codigo_banco: string
