@@ -8,7 +8,7 @@ export class CriadoProduto1614306477541 implements MigrationInterface {
         columns: [
           {
             name: 'pro_id',
-            type: 'int',
+            type: 'int unsigned',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment'
@@ -28,7 +28,7 @@ export class CriadoProduto1614306477541 implements MigrationInterface {
           },
           {
             name: 'est_id',
-            type: 'int'
+            type: 'int unsigned'
           }
         ]
       })

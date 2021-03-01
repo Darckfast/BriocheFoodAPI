@@ -8,7 +8,7 @@ export class CriarUsuarios1614113316556 implements MigrationInterface {
         columns: [
           {
             name: 'usu_id',
-            type: 'int',
+            type: 'int unsigned',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment'

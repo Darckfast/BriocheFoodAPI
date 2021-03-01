@@ -8,7 +8,7 @@ export class CriadoEstabelecimentos1614303903899 implements MigrationInterface {
         columns: [
           {
             name: 'est_id',
-            type: 'int',
+            type: 'int unsigned',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment'
@@ -20,9 +20,8 @@ export class CriadoEstabelecimentos1614303903899 implements MigrationInterface {
           },
           {
             name: 'usu_id',
-            type: 'int',
-            isUnique: true,
-            isNullable: true
+            type: 'int unsigned',
+            isUnique: true
           },
           {
             name: 'est_criado_em',

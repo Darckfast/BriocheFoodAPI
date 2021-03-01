@@ -7,7 +7,7 @@ export class CriadoProcolotoSeq1614537647854 implements MigrationInterface {
       columns: [
         {
           name: 'protocolo',
-          type: 'int',
+          type: 'int unsigned',
           isPrimary: true,
           isGenerated: true,
           generationStrategy: 'increment'

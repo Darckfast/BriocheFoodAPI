@@ -7,7 +7,7 @@ export class CriadoPedido1614532846483 implements MigrationInterface {
       columns: [
         {
           name: 'ped_id',
-          type: 'int',
+          type: 'int unsigned',
           isPrimary: true,
           isGenerated: true,
           generationStrategy: 'increment'
@@ -19,15 +19,16 @@ export class CriadoPedido1614532846483 implements MigrationInterface {
         },
         {
           name: 'est_id',
-          type: 'int'
+          type: 'int unsigned'
         },
         {
           name: 'usu_id',
-          type: 'int'
+          type: 'int unsigned',
+          isNullable: true
         },
         {
           name: 'pro_id',
-          type: 'int'
+          type: 'int unsigned'
         },
         {
           name: 'ped_status',
@@ -35,7 +36,7 @@ export class CriadoPedido1614532846483 implements MigrationInterface {
         },
         {
           name: 'ped_quantidade',
-          type: 'int'
+          type: 'int unsigned'
         },
         {
           name: 'ped_total',
@@ -43,7 +44,7 @@ export class CriadoPedido1614532846483 implements MigrationInterface {
         },
         {
           name: 'ped_protocolo',
-          type: 'int'
+          type: 'int unsigned'
         }
       ]
     }))
