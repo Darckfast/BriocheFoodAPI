@@ -1,5 +1,4 @@
 tmp/
-src/
 
 .git
 .vscode
@@ -10,6 +9,7 @@ e2e/*.map
 
 node_modules/
 npm-debug.log
+dist
 
 .scannerwork
 coverage

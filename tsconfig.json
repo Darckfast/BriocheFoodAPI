@@ -14,6 +14,7 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
     "resolveJsonModule": true,
     "typeRoots": [
       "src/@types",
@@ -22,13 +23,25 @@
     "baseUrl": ".",
     "paths": {
       "@controllers/*": [
-        "./src/controllers/*"
+        "src/controllers/*"
       ],
       "@models/*": [
-        "./src/models/*"
+        "src/models/*"
       ],
       "@services/*": [
-        "./src/services/*"
+        "src/services/*"
+      ],
+      "@repository/*": [
+        "src/repositories/*"
+      ],
+      "@erro/*": [
+        "src/erros/*"
+      ],
+      "@beans/*": [
+        "src/beans/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
       ]
     }
   }

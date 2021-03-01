@@ -1,9 +1,4 @@
-import express from 'express'
+import { app } from './app'
+import { log } from './utils/CriarLogger'
 
-const app = express()
-
-app.get('/', (req, res) => {
-  return res.json({ message: true })
-})
-
-app.listen(3333)
+app.listen(3333, () => log.info('App iniciado :)'))

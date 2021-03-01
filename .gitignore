@@ -124,3 +124,8 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,vscode
 .scannerwork
 coverage
+
+.pem
+.pub
+main.pem
+main.pub
