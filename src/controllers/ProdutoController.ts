@@ -43,9 +43,10 @@ class ProdutoController {
       })
     }
 
-    const { pagina, itens } = req.query
+    const { pagina, itens } = req.query as {[key: string]: string}
+
     try {
-      const produtos = await buscarProdutos(pagina, itens)
+      const produtos = await buscarProdutos(parseInt(pagina), parseInt(itens))
 
       return res.status(200).json(produtos)
     } catch (e) {
