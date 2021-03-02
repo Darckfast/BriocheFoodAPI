@@ -48,6 +48,7 @@ class JWEUtils {
   }
 
   async verificarJWE (jwe: string | undefined): Promise<any> {
+    log.info('Validando bearer')
     if (!jwe) {
       log.error('Bearer vazio')
 
@@ -61,9 +62,11 @@ class JWEUtils {
     try {
       const conteudo = await this.getConteudo(jwe)
       const { exp } = conteudo
+      const tempoAtual = new Date().getTime()
+      if (exp < tempoAtual) {
+        log.warn('Bearer de autenticacao expirado por %s', tempoAtual - exp)
 
-      if (exp < new Date().getTime()) {
-        log.warn('Bearer de autenticacao expirado')
+        throw new TokenInvalidoErro('Bearer expirado')
       }
 
       return conteudo
