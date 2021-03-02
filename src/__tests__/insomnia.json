@@ -1,0 +1,399 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2021-03-02T19:23:29.477Z",
+  "__export_source": "insomnia.desktop.app:v2020.5.2",
+  "resources": [
+    {
+      "_id": "req_79083f51a2934b4e92ebb08ed4be1a37",
+      "parentId": "fld_7dcc4f9531e04e779905e7cb83bfb539",
+      "modified": 1614644041292,
+      "created": 1614471588080,
+      "url": "{{ _.baseUrl }}/health",
+      "name": "Healthcheck",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1614471588080,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_7dcc4f9531e04e779905e7cb83bfb539",
+      "parentId": "fld_871f8465c0e94b0eadd4525dfdce3268",
+      "modified": 1614471581373,
+      "created": 1614471581373,
+      "name": "Health",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1614471581373,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_871f8465c0e94b0eadd4525dfdce3268",
+      "parentId": "wrk_f8f0a1eca8f1479d859e8101b6b62585",
+      "modified": 1614117521723,
+      "created": 1614117521723,
+      "name": "BirocheFoodAPI",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1614117521723,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_f8f0a1eca8f1479d859e8101b6b62585",
+      "parentId": null,
+      "modified": 1614712991306,
+      "created": 1614117482732,
+      "name": "BriocheFoodAPI",
+      "description": "",
+      "scope": null,
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_55f56d4caa64478cbbd86fbeb14e9187",
+      "parentId": "fld_b61035f11b40448cbbbad580c1869dad",
+      "modified": 1614712584361,
+      "created": 1614376050951,
+      "url": "{{ _.baseUrl }}/pedido",
+      "name": "Criar pedido",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"carrinho\": [\n\t\t{\n\t\t\t\"produtoId\": \"{% response 'body', 'req_821914ed15674dbb9ada92d4867b22ab', 'b64::JC5jb250ZXVkb1swXS5pZA==::46b', 'always', 60 %}\",\n\t\t\t\"quantidade\": 1\n\t\t}\n\t],\n\t\"pagamento\": {\n\t\t\"numero_cartao\": \"4111111111111111\",\n\t\t\"cvv\": \"132\",\n\t\t\"data_expiracao\":\"0922\",\n\t\t\"nome\": \"Morpheus Fishburne\"\n\t},\n\t\"envio\": {\n\t\t\"nome\": \"Neo Reeves\",\n\t\t\"endereco\": {\n\t\t\t\"estado\": \"sp\",\n\t\t\t\"cidade\": \"Cotia\",\n\t\t\t\"bairro\": \"Rio Cotia\",\n\t\t\t\"rua\": \"Rua Matrix\",\n\t\t\t\"numero\": \"9999\",\n\t\t\t\"cep\": \"06714360\"\n\t\t}\n\t}\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_3cc47d8860da4651b052316643ed8ddb"
+        },
+        {
+          "name": "Authorization",
+          "value": "{% response 'header', 'req_f26ea3c23c3348f0bd5610da22001b3c', 'b64::QXV0aG9yaXphdGlvbg==::46b', 'always', 60 %}",
+          "description": "",
+          "id": "pair_f1c63b03e40644df9b4c8fd2d6e87e5d",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1614376050989,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_b61035f11b40448cbbbad580c1869dad",
+      "parentId": "fld_871f8465c0e94b0eadd4525dfdce3268",
+      "modified": 1614376037015,
+      "created": 1614376037015,
+      "name": "Pedido",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1614376037015,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_b3c8e18020544f8fb85cba7e28f3d0de",
+      "parentId": "fld_eabe561cc82140708296c41849d84dfe",
+      "modified": 1614644014765,
+      "created": 1614305466441,
+      "url": "{{ _.baseUrl }}/estabelecimento",
+      "name": "Criar estabelecimento",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"nome\": \"Nome do estabelecimento\",\n\t\"codigo_banco\": \"237\",\n\t\"agencia\": \"1935\",\n\t\"agencia_dv\": \"9\",\n\t\"conta\": \"23398\",\n\t\"conta_dv\": \"9\",\n\t\"nome_legal\": \"API BANK ACCOUNT\",\n\t\"numero_documento\": \"26268738888\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_6bfa2ce387064e8bb78ed3e79b51b2ad"
+        },
+        {
+          "name": "Authorization",
+          "value": "{% response 'header', 'req_f26ea3c23c3348f0bd5610da22001b3c', 'b64::QXV0aG9yaXphdGlvbg==::46b', 'always', 60 %}",
+          "description": "",
+          "id": "pair_877a70b446ee4919adcf82d1e0130104",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1611241830327.25,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_eabe561cc82140708296c41849d84dfe",
+      "parentId": "fld_871f8465c0e94b0eadd4525dfdce3268",
+      "modified": 1614372855368,
+      "created": 1614372855368,
+      "name": "Estabelecimento",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1614372855368,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_47328d3e52eb4c2a89db1d48c1a274bd",
+      "parentId": "fld_e1f539c0221c4e7c84013a8c34d59449",
+      "modified": 1614644017961,
+      "created": 1614117531949,
+      "url": "{{ _.baseUrl }}/usuario",
+      "name": "Criar usuario",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"login\": \"login_do_usuario\",\n\t\"senha\": \"senha_do_usuario\",\n\t\"nome\": \"primeiro usuario\",\n\t\"tipo\": 0,\n\t\"email\": \"email@gmail.com.br\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_6bfa2ce387064e8bb78ed3e79b51b2ad"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1614117532049,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_e1f539c0221c4e7c84013a8c34d59449",
+      "parentId": "fld_871f8465c0e94b0eadd4525dfdce3268",
+      "modified": 1614372846565,
+      "created": 1614372846565,
+      "name": "Usuario",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1614372846565,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_f26ea3c23c3348f0bd5610da22001b3c",
+      "parentId": "fld_e1f539c0221c4e7c84013a8c34d59449",
+      "modified": 1614644020545,
+      "created": 1614134470707,
+      "url": "{{ _.baseUrl }}/auth",
+      "name": "Autenticar",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"login\": \"login_do_usuario\",\n\t\"senha\": \"senha_do_usuario\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_6bfa2ce387064e8bb78ed3e79b51b2ad"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1614117531999,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_73109212dcc9430b9c892f0c325ab030",
+      "parentId": "fld_4020bd6300c34751a7d8b4810619174f",
+      "modified": 1614644023277,
+      "created": 1614371011300,
+      "url": "{{ _.baseUrl }}/produto",
+      "name": "Cadastrar produto",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"produtos\": [\n\t\t{\n\t\t\t\"nome\": \"Café\",\n\t\t\t\"preco\": 2.55,\n\t\t\t\"quantidade\": 500\n\t\t},\n\t\t{\n\t\t\t\"nome\": \"Suco de laranja\",\n\t\t\t\"preco\": 3.5,\n\t\t\t\"quantidade\": 300\n\t\t}\n\t]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_6bfa2ce387064e8bb78ed3e79b51b2ad"
+        },
+        {
+          "name": "Authorization",
+          "value": "{% response 'header', 'req_f26ea3c23c3348f0bd5610da22001b3c', 'b64::QXV0aG9yaXphdGlvbg==::46b', 'always', 60 %}",
+          "description": "",
+          "id": "pair_877a70b446ee4919adcf82d1e0130104",
+          "disabled": false
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1610762546723.625,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_4020bd6300c34751a7d8b4810619174f",
+      "parentId": "fld_871f8465c0e94b0eadd4525dfdce3268",
+      "modified": 1614372840783,
+      "created": 1614372840783,
+      "name": "Produtos",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1614372840783,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_821914ed15674dbb9ada92d4867b22ab",
+      "parentId": "fld_4020bd6300c34751a7d8b4810619174f",
+      "modified": 1614644028855,
+      "created": 1614373542199,
+      "url": "{{ _.baseUrl }}/produto",
+      "name": "Buscar produtos",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "pagina",
+          "value": "0",
+          "description": "",
+          "id": "pair_c1a91a260c5147faa03c1b2096d6b373",
+          "disabled": false
+        },
+        {
+          "name": "itens",
+          "value": "10",
+          "description": "",
+          "id": "pair_f0f38e274f424708a1e9a1d37238c6fa",
+          "disabled": false
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1610522904921.8125,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_33bcfd1b96b3bb646d6d4d8d0909f790a0afe38f",
+      "parentId": "wrk_f8f0a1eca8f1479d859e8101b6b62585",
+      "modified": 1614117482813,
+      "created": 1614117482813,
+      "name": "Base Environment",
+      "data": {},
+      "dataPropertyOrder": null,
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1614117482813,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_33bcfd1b96b3bb646d6d4d8d0909f790a0afe38f",
+      "parentId": "wrk_f8f0a1eca8f1479d859e8101b6b62585",
+      "modified": 1614377952851,
+      "created": 1614117482815,
+      "name": "Default Jar",
+      "cookies": [
+        {
+          "key": "__cfduid",
+          "value": "d5ccb843bee5b27e64f7b88bd27f6ab671614377952",
+          "expires": "2021-03-28T22:19:12.000Z",
+          "domain": "pagar.me",
+          "path": "/",
+          "httpOnly": true,
+          "extensions": [
+            "SameSite=Lax"
+          ],
+          "hostOnly": false,
+          "creation": "2021-02-26T22:19:12.843Z",
+          "lastAccessed": "2021-02-26T22:19:12.843Z",
+          "id": "5556200990082258"
+        }
+      ],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_5099da30ec3641ed9da0ee322a904ac2",
+      "parentId": "wrk_f8f0a1eca8f1479d859e8101b6b62585",
+      "modified": 1614117482741,
+      "created": 1614117482741,
+      "fileName": "Pagar.me",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    },
+    {
+      "_id": "env_0c5ed20b28e34b1b8a131ff02177400c",
+      "parentId": "env_33bcfd1b96b3bb646d6d4d8d0909f790a0afe38f",
+      "modified": 1614530271959,
+      "created": 1614117491857,
+      "name": "localhost",
+      "data": {
+        "baseUrl": "http://localhost:3333/api/v1"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "baseUrl"
+        ]
+      },
+      "color": "#3c6fcd",
+      "isPrivate": false,
+      "metaSortKey": 1614117491857,
+      "_type": "environment"
+    }
+  ]
+}

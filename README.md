@@ -2,11 +2,11 @@
 
 ## Rodando a API
 
-Esta API possui sua propiá [imagem Docker](https://hub.docker.com/r/darckfast/briochefoodapi)
+Esta API possui uma [imagem Docker](https://hub.docker.com/r/darckfast/briochefoodapi)
 
-Para executar essa API é necessário configurar um banco MySQL e para isso basta seguir as instruções abaixo
+Para executar essa API é necessário configurar um banco MySQL 8 e para isso basta seguir as instruções abaixo
 
-Chaves RSA e outros segredos tambem são necessários. Para facilitar o teste/desenvolvimento, dentro do diretorio `src/__test__` há os seguintes arquivos `_test.pem`, `_test.pub` e `.test.env` que possuem chaves usadas somente para **teste** e não devem ser usadas em produção
+Chaves RSA e outros segredos também são necessários. Para facilitar o teste/desenvolvimento, dentro do diretório `src/__test__` há os seguintes arquivos `_test.pem`, `_test.pub` e `.test.env` que possuem chaves usadas somente para **teste** e não devem ser usadas em produção
 
 ### Criando o DB
 
@@ -33,17 +33,22 @@ create user 'usuario_api'@'%' identified by 'senha_super_secreta';
 grant CREATE, DELETE, INSERT, SELECT, UPDATE, ALTER, REFERENCES on api_db.* to 'usuario_api'@'%';
 
 show grants for 'usuario_api'@'%';
+
+quit
+
+exit
 ```
 
 Isso vai criar um usuário no db com o login `usuario_api` com a senha `senha_super_secreta`
 
-Execute as migrations
+Instale as dependências e execute as migrations
 
 ```bash
-yarn typeorm migration:run
+yarn && yarn typeorm migration:run
 ```
 
 ### Docker
+**Para teste/desenvolvimento é possível usar as chaves RSA providas no diretório `src/__tests__`**
 
 Para rodar a imagem Docker da API execute:
 
@@ -55,12 +60,13 @@ docker run -it \
   -e RSA_AUTH_PUB_KEY="$(cat src/__tests__/_test.pub)" \
   -e PAGARME_API_KEY=api_key_pagar_me \
   -e RE_ID=id_do_recebedor_principal \
+  -e TYPEORM_HOST=ip_do_host_do_db \
   darckfast/briochefoodapi
 ```
 
 A `PAGARME_API_KEY` (api key) e `RE_ID` (id do recebedor) ambos podem ser obtidos na Dashboard da Pagar.me
 
-### Configurando o .env para desenvolvimento
+### Configurando as envs para desenvolvimento
 
 Para configurar os segredos e as credencias crie um `.env` na raiz do projeto, ou copie o `.test.env` do diretório `src/__test__` para a raiz do projeto com o nome `.env`, (esse arquivo é ignorado no push) com as seguintes envs:
 
@@ -81,8 +87,9 @@ Para teste e desenvolvimento as chaves RSA podem ser geradas usando alguma ferra
 Para o uso em produção, é recomendado a geração das chaves usando openssl, e elas devem ser armazenadas em um cofre de segredos como o [Vault](https://www.vaultproject.io/) ou [AWS Secrets Manager](https://aws.amazon.com/pt/secrets-manager)
 
 ## Endpoints
+Para facilitar os testes dos endpoints, no diretório `src/__tests__` inclui o `insomnia.json` que contem as chamadas REST dos endpoints no formato do Insomnia, para usar basta instalar o [Insomnia](https://insomnia.rest/download/) e `Application -> Preferences -> Data -> Import Data -> From File` isso vai importar um *Workspace* chamada `BriocheFoodAPI` com as chamadas
 
-### Usuario
+### Usuário
 
 Este endpoint permite a criação de usuário (necessário para cadastrar um estabelecimento)
 
