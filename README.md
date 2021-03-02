@@ -66,7 +66,7 @@ docker run -it \
 
 A `PAGARME_API_KEY` (api key) e `RE_ID` (id do recebedor) ambos podem ser obtidos na Dashboard da Pagar.me
 
-### Configurando as envs
+### Configurando as envs para desenvolvimento
 
 Para configurar os segredos e as credencias crie um `.env` na raiz do projeto, ou copie o `.test.env` do diretório `src/__test__` para a raiz do projeto com o nome `.env`, (esse arquivo é ignorado no push) com as seguintes envs:
 
