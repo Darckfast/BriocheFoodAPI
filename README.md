@@ -6,7 +6,7 @@ Esta API possui uma [imagem Docker](https://hub.docker.com/r/darckfast/briochefo
 
 Para executar essa API é necessário configurar um banco MySQL 8 e para isso basta seguir as instruções abaixo
 
-Chaves RSA e outros segredos tambem são necessários. Para facilitar o teste/desenvolvimento, dentro do diretorio `src/__test__` há os seguintes arquivos `_test.pem`, `_test.pub` e `.test.env` que possuem chaves usadas somente para **teste** e não devem ser usadas em produção
+Chaves RSA e outros segredos também são necessários. Para facilitar o teste/desenvolvimento, dentro do diretório `src/__test__` há os seguintes arquivos `_test.pem`, `_test.pub` e `.test.env` que possuem chaves usadas somente para **teste** e não devem ser usadas em produção
 
 ### Criando o DB
 
@@ -87,9 +87,9 @@ Para teste e desenvolvimento as chaves RSA podem ser geradas usando alguma ferra
 Para o uso em produção, é recomendado a geração das chaves usando openssl, e elas devem ser armazenadas em um cofre de segredos como o [Vault](https://www.vaultproject.io/) ou [AWS Secrets Manager](https://aws.amazon.com/pt/secrets-manager)
 
 ## Endpoints
-Para facilitar os testes dos endpoints, no diretorio `src/__tests__` inclui o `insomnia.json` que contem as chamadas REST dos endpoints no formato do Insomnia, para usar basta instalar o [Insomnia](https://insomnia.rest/download/) e `Application -> Preferences -> Data -> Import Data -> From File` isso vai importar um *Workspace* chamada `BriocheFoodAPI` com as chamadas
+Para facilitar os testes dos endpoints, no diretório `src/__tests__` inclui o `insomnia.json` que contem as chamadas REST dos endpoints no formato do Insomnia, para usar basta instalar o [Insomnia](https://insomnia.rest/download/) e `Application -> Preferences -> Data -> Import Data -> From File` isso vai importar um *Workspace* chamada `BriocheFoodAPI` com as chamadas
 
-### Usuario
+### Usuário
 
 Este endpoint permite a criação de usuário (necessário para cadastrar um estabelecimento)
 
