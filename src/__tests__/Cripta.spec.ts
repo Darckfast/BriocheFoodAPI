@@ -1,4 +1,4 @@
-import { criptografarString, comparaSenha, gerarHashString } from '../services/Cripta'
+import { criptografarString, comparaSenha, gerarHashString } from '../utils/Cripta'
 
 describe('cripta', () => {
   it('criptografar senha', () => {
