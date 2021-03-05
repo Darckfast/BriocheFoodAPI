@@ -4,12 +4,20 @@ import { log } from '@utils/CriarLogger'
 import { JWK, JWE } from 'node-jose'
 
 class JWEUtils {
+  private jwe: string
+  private conteudo: any
+  private key: JWK.Key
+
+  constructor (jwe: string = '') {
+    this.jwe = jwe
+  }
+
   keystore = JWK.createKeyStore();
 
   privateKey: string = process.env.RSA_AUTH_PRI_KEY as string
   publicKey: string = process.env.RSA_AUTH_PUB_KEY as string
 
-  async gerarJWE (payload: Object): Promise<string> {
+  async gerarJWE (payload: Object): Promise<void> {
     const key = await JWK.asKey(this.publicKey, 'pem', { alg: 'RSA-OAEP-256', use: 'enc' })
 
     const jweConteudo = JSON.stringify({
@@ -26,7 +34,11 @@ class JWEUtils {
         .update(jweConteudo)
         .final()
 
-    return jweString
+    this.jwe = jweString
+  }
+
+  formatado (): string {
+    return 'Bearer ' + this.jwe
   }
 
   async getConteudo (jwe: string | undefined): Promise<any> {
@@ -37,7 +49,6 @@ class JWEUtils {
     if (jwe.startsWith('Bearer')) {
       jwe = jwe.replace('Bearer ', '')
     }
-
     const key = await JWK.asKey(this.privateKey, 'pem', { alg: 'RSA-OAEP-256', use: 'enc' })
 
     const jweConteudo = (await JWE.createDecrypt(key, {
@@ -74,6 +85,64 @@ class JWEUtils {
       log.error('Bearer invalido', e)
 
       throw new TokenInvalidoErro('Bearer invalido')
+    }
+  }
+
+  async verificarBearer (): Promise<void> {
+    log.info('Verificando bearer')
+
+    if (this.jwe.startsWith('Bearer')) {
+      this.jwe = this.jwe.replace('Bearer ', '')
+    }
+
+    try {
+      const { exp } = await this.getConteudo(this.jwe)
+      const tempoAtual = new Date().getTime()
+
+      if (exp < tempoAtual) {
+        log.warn('Bearer de autenticacao expirado por %s', tempoAtual - exp)
+
+        throw new TokenInvalidoErro('Bearer expirado')
+      }
+
+      this.extrairConteudo()
+    } catch (e) {
+      log.error('Bearer invalido', e)
+
+      throw new TokenInvalidoErro('Bearer invalido')
+    }
+  }
+
+  async extrairConteudo (): Promise<any> {
+    if (this.jwe.startsWith('Bearer')) {
+      this.jwe = this.jwe.replace('Bearer ', '')
+    }
+    this.key = await JWK.asKey(this.privateKey, 'pem', { alg: 'RSA-OAEP-256', use: 'enc' })
+
+    this.conteudo = JSON.parse((
+      await JWE.createDecrypt(this.key, {
+        algorithms: ['RSA-OAEP-256', 'A256GCM']
+      }).decrypt(this.jwe))
+      .payload.toString())
+
+    return this.conteudo
+  }
+
+  async extrairCampo (campo: string): Promise<string | number | object | boolean> {
+    return this.conteudo[campo]
+  }
+
+  async verificarAcesso (acesso: string): Promise<void> {
+    if (!acesso) {
+      log.info('Nenhum acesso especificado')
+      return
+    }
+
+    log.info('Verificando acesso %s', acesso)
+    const possuiAcesso = acesso.includes(this.conteudo.acessos)
+
+    if (!possuiAcesso) {
+      throw new Error('Nao possui acesso ' + acesso)
     }
   }
 }

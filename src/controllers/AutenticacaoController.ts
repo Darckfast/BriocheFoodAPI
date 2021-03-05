@@ -1,10 +1,10 @@
-import type { Request, Response } from 'express'
-import { validationResult } from 'express-validator'
-import { log } from '@utils/CriarLogger'
 import { SenhaNaoConfere } from '@erro/SenhaNaoConfere'
 import { UsuarioNaoExisteErro } from '@erro/UsuarioNaoExiste'
-import { JWEUtils } from '@services/JWEUtils'
 import { autenticarUsuario } from '@services/UsuarioService'
+import { log } from '@utils/CriarLogger'
+import { JWEUtils } from '@utils/JWEUtils'
+import type { Request, Response } from 'express'
+import { validationResult } from 'express-validator'
 
 class AutenticacaoController {
   async autenticar (req: Request, res: Response) {
@@ -21,13 +21,16 @@ class AutenticacaoController {
     const { senha, login } = req.body
 
     try {
-      const autenConteudo = { ...await autenticarUsuario(login, senha), sub: login }
+      const autenticacao = { ...await autenticarUsuario(login, senha), sub: login }
 
-      const jwe = await new JWEUtils().gerarJWE(autenConteudo)
+      const jweUtils = new JWEUtils()
+      await jweUtils.gerarJWE(autenticacao)
 
-      return res.header('Authorization', 'Bearer ' + jwe).status(200).json({
-        mensagem: 'autenticado'
-      })
+      return res.header('Authorization', jweUtils.formatado())
+        .status(200)
+        .json({
+          mensagem: 'autenticado'
+        })
     } catch (e) {
       if (e instanceof SenhaNaoConfere || e instanceof UsuarioNaoExisteErro) {
         return res.status(401).json({

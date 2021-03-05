@@ -4,7 +4,7 @@ import { Produto } from '@models/Produto'
 import { ProdutoRepository } from '@repository/ProdutoRepository'
 import { log } from '@utils/CriarLogger'
 import { getCustomRepository } from 'typeorm'
-import { criptografarString, descriptografarString } from './Cripta'
+import { criptografarString, descriptografarString } from '../utils/Cripta'
 import { buscarEstabelecimento, buscarEstabelecimentoPorId } from './EstabelecimentoService'
 
 const cadastrarProdutos = async (produtos: [{ nome: string, preco: number, quantidade: number }], login: string) => {

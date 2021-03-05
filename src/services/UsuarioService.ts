@@ -8,7 +8,7 @@ import { UsuarioRepository } from '@repository/UsuarioRepository'
 import { log } from '@utils/CriarLogger'
 import { getCustomRepository } from 'typeorm'
 import zxcvbn from 'zxcvbn'
-import { comparaSenha, gerarHashString } from './Cripta'
+import { comparaSenha, gerarHashString } from '../utils/Cripta'
 
 const criarUsuario = async (nome: string, login: string, senha: string, tipo: number, email: string) => {
   const usuarioRepo = getCustomRepository(UsuarioRepository)
@@ -58,7 +58,7 @@ const persistirUsuario = async (usuario: Usuario) => {
   }
 }
 
-const autenticarUsuario = async (login: string, senha: string): Promise<{tipo: number}> => {
+const autenticarUsuario = async (login: string, senha: string): Promise<{ acesso: number }> => {
   const usuarioRepo = getCustomRepository(UsuarioRepository)
   const usuarioPersistido = await usuarioRepo.findOne({ login: login.toLowerCase() })
 
@@ -76,7 +76,7 @@ const autenticarUsuario = async (login: string, senha: string): Promise<{tipo: n
     throw new SenhaNaoConfere('Senha nao confere')
   }
 
-  return { tipo: usuarioPersistido.tipo }
+  return { acesso: usuarioPersistido.tipo }
 }
 
 export { criarUsuario, autenticarUsuario, buscarUsuarioPorLogin }

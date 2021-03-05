@@ -1,4 +1,4 @@
-import { JWEUtils } from '@services/JWEUtils'
+import { JWEUtils } from '@utils/JWEUtils'
 import { cadastrarProdutos, buscarProdutos } from '@services/ProdutoService'
 import { log } from '@utils/CriarLogger'
 import type { Request, Response } from 'express'
