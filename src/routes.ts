@@ -1,19 +1,20 @@
 import { UsuarioController } from './controllers/UsuarioController'
-import { AutenticacaoController } from './controllers/AutenticacaoController'
 import { Router } from 'express'
 import { body, oneOf, query } from 'express-validator'
 import { EstabelecimentoController } from '@controllers/EstabelecimentoController'
 import { ProdutoController } from '@controllers/ProdutoController'
 import { cnpj, cpf } from 'cpf-cnpj-validator'
 import { PedidoController } from '@controllers/PedidoController'
+import { autorizar } from './middleware/Autorizacao'
+import { AutenticacaoController } from '@controllers/AutenticacaoController'
 
 const router = Router()
 
 const usuarioController = new UsuarioController()
-const autenticacaoController = new AutenticacaoController()
 const estabelecimentoController = new EstabelecimentoController()
 const produtoController = new ProdutoController()
 const pedidoController = new PedidoController()
+const autenticacaoController = new AutenticacaoController()
 
 router.post(
   '/api/v1/usuario',
@@ -30,6 +31,7 @@ router.post('/api/v1/auth',
   autenticacaoController.autenticar)
 
 router.post('/api/v1/estabelecimento',
+  autorizar(),
   body('nome').isLength({ min: 3, max: 255 }).matches(/^[a-zA-Z0-9 .-@_]*$/),
   body('codigo_banco').isString().isLength({ min: 3, max: 3 }),
   body('agencia').isString().isLength({ min: 1, max: 16 }),
@@ -57,8 +59,8 @@ router.post('/api/v1/estabelecimento',
   ]),
   estabelecimentoController.criar)
 
-// Adicionado validacao array
 router.post('/api/v1/produto',
+  autorizar(),
   body('produtos').isArray().notEmpty(),
   body('produtos.*.nome').isString().notEmpty(),
   body('produtos.*.preco').isFloat({ min: 0.1 }),
@@ -66,11 +68,13 @@ router.post('/api/v1/produto',
   produtoController.cadastrar)
 
 router.get('/api/v1/produto',
+  autorizar('', false),
   query('pagina').isInt({ min: 0 }),
   query('itens').isInt({ min: 1, max: 10 }),
   produtoController.buscar)
 
 router.post('/api/v1/pedido',
+  autorizar('', false),
   body('carrinho').isArray().notEmpty(),
   body('carrinho.*.produtoId').isString().isLength({ min: 50, max: 64 }),
   body('carrinho.*.quantidade').isInt({ min: 1 }),
