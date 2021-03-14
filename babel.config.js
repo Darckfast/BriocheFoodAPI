@@ -18,9 +18,11 @@ module.exports = {
           '@services': './src/services',
           '@models': './src/models',
           '@repository': './src/repositories',
-          '@erro': './src/erros',
+          '@errors': './src/errors',
           '@beans': './src/beans',
-          '@utils': './src/utils'
+          '@utils': './src/utils',
+          '@middleware': './src/middleware',
+          '@routes': './src/routes'
         }
       }],
     [

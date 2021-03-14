@@ -1,6 +1,6 @@
-import { JWEUtils } from '@utils/JWEUtils'
-import { cadastrarProdutos, buscarProdutos } from '@services/ProdutoService'
+import { buscarProdutos, cadastrarProdutos } from '@services/ProdutoService'
 import { log } from '@utils/CriarLogger'
+import { JWEUtils } from '@utils/JWEUtils'
 import type { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 

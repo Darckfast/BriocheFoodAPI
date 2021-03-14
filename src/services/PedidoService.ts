@@ -1,22 +1,22 @@
 import { Carrinho, Pedido } from '@beans/PedidoBean'
+import { ProdutoVazioErro } from '@errors/ProdutoVazioErro'
+import { QuantidadeErro } from '@errors/QuantidadeErro'
 import { Usuario } from '@models/Usuario'
 import { PedidoRepository } from '@repository/PedidoRepository'
 import { ProdutoRepository } from '@repository/ProdutoRepository'
 import { log } from '@utils/CriarLogger'
+import { criptografarString } from '@utils/Cripta'
 import { Transaction, TransactionRepository } from 'typeorm'
-import { criptografarString } from '../utils/Cripta'
+import { buscarEstabelecimentoPorId } from './EstabelecimentoService'
+import { criarTransacao } from './PagarmeService'
 import { buscarProdutoPorIdHash } from './ProdutoService'
 import { gerarProtocolo } from './ProtocoloService'
 import { buscarUsuarioPorLogin } from './UsuarioService'
-import { criarTransacao } from './PagarmeService'
-import { QuantidadeErro } from '@erro/QuantidadeErro'
-import { ProdutoVazioErro } from '@erro/ProdutoVazioErro'
-import { buscarEstabelecimentoPorId } from './EstabelecimentoService'
 
 class PedidoService {
   @Transaction()
   async criarPedido (
-    pedidoPayload: Pedido, login: string,
+    pedidoPayload: Pedido, login: string | null,
     @TransactionRepository(PedidoRepository) pedidoRepository?: PedidoRepository,
     @TransactionRepository(ProdutoRepository) produtoRepository?: ProdutoRepository): Promise<string> {
     if (!pedidoRepository || !produtoRepository) {

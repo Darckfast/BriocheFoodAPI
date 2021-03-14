@@ -1,11 +1,11 @@
 import { Pedido } from '@beans/PedidoBean'
-import { IDInvalidoErro } from '@erro/IDInvalidoErro'
-import { ProdutoNaoExisteErro } from '@erro/ProdutoNaoExisteErro'
-import { ProdutoVazioErro } from '@erro/ProdutoVazioErro'
-import { QuantidadeErro } from '@erro/QuantidadeErro'
-import { JWEUtils } from '@utils/JWEUtils'
+import { IDInvalidoErro } from '@errors/IDInvalidoErro'
+import { ProdutoNaoExisteErro } from '@errors/ProdutoNaoExisteErro'
+import { ProdutoVazioErro } from '@errors/ProdutoVazioErro'
+import { QuantidadeErro } from '@errors/QuantidadeErro'
 import { PedidoService } from '@services/PedidoService'
 import { log } from '@utils/CriarLogger'
+import { JWEUtils } from '@utils/JWEUtils'
 import type { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 
@@ -14,39 +14,52 @@ class PedidoController {
 
   async criar (req: Request, res: Response) {
     try {
-      const sub = await new JWEUtils().verificarJWE(req.header('Authorization')).catch(() => null)
+      const bearer = req.header('Authorization')
+
+      let sub: string | null = null
+      if (bearer) {
+        const jweUtils = new JWEUtils(req.header('Authorization'))
+        sub = await jweUtils.extrairCampo('sub') as string
+      }
 
       const errors = validationResult(req)
 
       if (!errors.isEmpty()) {
         log.warn('Payload para criar produto invalido', errors)
 
-        return res.status(400).json({
-          mensagem: 'payload invalido'
-        })
+        return res
+          .status(400)
+          .json({
+            mensagem: 'payload invalido'
+          })
       }
 
       const pedido: Pedido = req.body
 
-      const pedidoId = await new PedidoService().criarPedido(pedido, sub ? sub.sub : sub)
+      const pedidoId = await new PedidoService().criarPedido(pedido, sub)
 
-      return res.status(200).json({
-        mensagem: 'pedido realizado',
-        pedidoId
-      })
+      return res
+        .status(200)
+        .json({
+          mensagem: 'pedido realizado',
+          pedidoId
+        })
     } catch (e) {
       if (e instanceof QuantidadeErro ||
         e instanceof IDInvalidoErro ||
         e instanceof ProdutoNaoExisteErro ||
         e instanceof ProdutoVazioErro) {
-        return res.status(400).json({
-          mensagem: 'requisicao invalida'
-        })
+        return res
+          .status(400)
+          .json({
+            mensagem: 'requisicao invalida'
+          })
       }
 
       log.error('Erro interno na geracao do pedido', e)
 
-      return res.status(500)
+      return res
+        .status(500)
         .json({ mensagem: 'erro interno' })
     }
   }

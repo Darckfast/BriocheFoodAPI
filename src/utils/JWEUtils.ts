@@ -1,5 +1,5 @@
-import { TokenFaltandoErro } from '@erro/TokenFaltandoErro'
-import { TokenInvalidoErro } from '@erro/TokenInvalidoErro'
+import { TokenFaltandoErro } from '@errors/TokenFaltandoErro'
+import { TokenInvalidoErro } from '@errors/TokenInvalidoErro'
 import { log } from '@utils/CriarLogger'
 import { JWK, JWE } from 'node-jose'
 

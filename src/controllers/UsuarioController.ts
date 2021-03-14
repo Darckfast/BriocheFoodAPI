@@ -1,6 +1,6 @@
 
-import { SenhaFracaErro } from '@erro/SenhaFracaErro'
-import { UsuarioExisteErro } from '@erro/UsuarioExiste'
+import { SenhaFracaErro } from '@errors/SenhaFracaErro'
+import { UsuarioExisteErro } from '@errors/UsuarioExiste'
 import { criarUsuario } from '@services/UsuarioService'
 import { log } from '@utils/CriarLogger'
 import type { Request, Response } from 'express'

@@ -1,14 +1,14 @@
-import { PersistenciaErro } from '@erro/PersistenciaErro'
-import { SenhaFracaErro } from '@erro/SenhaFracaErro'
-import { SenhaNaoConfere } from '@erro/SenhaNaoConfere'
-import { UsuarioExisteErro } from '@erro/UsuarioExiste'
-import { UsuarioNaoExisteErro } from '@erro/UsuarioNaoExiste'
+import { PersistenciaErro } from '@errors/PersistenciaErro'
+import { SenhaFracaErro } from '@errors/SenhaFracaErro'
+import { SenhaNaoConfere } from '@errors/SenhaNaoConfere'
+import { UsuarioExisteErro } from '@errors/UsuarioExiste'
+import { UsuarioNaoExisteErro } from '@errors/UsuarioNaoExiste'
 import { Usuario } from '@models/Usuario'
 import { UsuarioRepository } from '@repository/UsuarioRepository'
 import { log } from '@utils/CriarLogger'
+import { comparaSenha, gerarHashString } from '@utils/Cripta'
 import { getCustomRepository } from 'typeorm'
 import zxcvbn from 'zxcvbn'
-import { comparaSenha, gerarHashString } from '../utils/Cripta'
 
 const criarUsuario = async (nome: string, login: string, senha: string, tipo: number, email: string) => {
   const usuarioRepo = getCustomRepository(UsuarioRepository)

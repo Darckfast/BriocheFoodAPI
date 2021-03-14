@@ -1,5 +1,5 @@
-import { SenhaNaoConfere } from '@erro/SenhaNaoConfere'
-import { UsuarioNaoExisteErro } from '@erro/UsuarioNaoExiste'
+import { SenhaNaoConfere } from '@errors/SenhaNaoConfere'
+import { UsuarioNaoExisteErro } from '@errors/UsuarioNaoExiste'
 import { autenticarUsuario } from '@services/UsuarioService'
 import { log } from '@utils/CriarLogger'
 import { JWEUtils } from '@utils/JWEUtils'
