@@ -1,6 +1,6 @@
 import { EstabelecimentoBean } from '@beans/EstabelecimentoBean'
-import { ConflitoEstabelecimentoErro } from '@erro/ConflitoEstabelecimentoErro'
-import { NaoEncontradoErro } from '@erro/NaoEncontradoErro'
+import { ConflitoEstabelecimentoErro } from '@errors/ConflitoEstabelecimentoErro'
+import { NaoEncontradoErro } from '@errors/NaoEncontradoErro'
 import { Estabelecimento } from '@models/Estabelecimento'
 import { EstabelecimentoRepository } from '@repository/EstabelecimentoRepository'
 import { log } from '@utils/CriarLogger'

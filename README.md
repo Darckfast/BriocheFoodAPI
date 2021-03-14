@@ -48,16 +48,16 @@ yarn && yarn typeorm migration:run
 ```
 
 ### Docker
-**Para teste/desenvolvimento é possível usar as chaves RSA providas no diretório `src/__tests__`**
+**Para teste/desenvolvimento é possível usar as chaves RSA providas no diretório `src/__tests__/utils/`**
 
 Para rodar a imagem Docker da API execute:
 
 ```bash
 docker run -it \
   -p 3333:3333 \
-  --env-file src/__tests__/.test.env \
-  -e RSA_AUTH_PRI_KEY="$(cat src/__tests__/_test.pem)" \
-  -e RSA_AUTH_PUB_KEY="$(cat src/__tests__/_test.pub)" \
+  --env-file src/__tests__/utils/.test.env \
+  -e RSA_AUTH_PRI_KEY="$(cat src/__tests__/utils/_test.pem)" \
+  -e RSA_AUTH_PUB_KEY="$(cat src/__tests__/utils/_test.pub)" \
   -e PAGARME_API_KEY=api_key_pagar_me \
   -e RE_ID=id_do_recebedor_principal \
   -e TYPEORM_HOST=ip_do_host_do_db \
@@ -87,7 +87,7 @@ Para teste e desenvolvimento as chaves RSA podem ser geradas usando alguma ferra
 Para o uso em produção, é recomendado a geração das chaves usando openssl, e elas devem ser armazenadas em um cofre de segredos como o [Vault](https://www.vaultproject.io/) ou [AWS Secrets Manager](https://aws.amazon.com/pt/secrets-manager)
 
 ## Endpoints
-Para facilitar os testes dos endpoints, no diretório `src/__tests__` inclui o `insomnia.json` que contem as chamadas REST dos endpoints no formato do Insomnia, para usar basta instalar o [Insomnia](https://insomnia.rest/download/) e `Application -> Preferences -> Data -> Import Data -> From File` isso vai importar um *Workspace* chamada `BriocheFoodAPI` com as chamadas
+Para facilitar os testes dos endpoints, no diretório `src/__tests__/utils/` inclui o `insomnia.json` que contem as chamadas REST dos endpoints no formato do Insomnia, para usar basta instalar o [Insomnia](https://insomnia.rest/download/) e `Application -> Preferences -> Data -> Import Data -> From File` isso vai importar um *Workspace* chamada `BriocheFoodAPI` com as chamadas
 
 ### Usuário
 

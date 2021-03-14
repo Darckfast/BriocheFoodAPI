@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import { Envio, Pagamento } from '@beans/PedidoBean'
 import { Recebedor } from '@beans/RecebedorBean'
-import { PagamentoRecusado } from '@erro/PagamentoRecusadoErro'
-import { PagarmeErro } from '@erro/PagarmeErro'
+import { PagamentoRecusado } from '@errors/PagamentoRecusadoErro'
+import { PagarmeErro } from '@errors/PagarmeErro'
 import { log } from '@utils/CriarLogger'
 import { request } from 'https'
 
